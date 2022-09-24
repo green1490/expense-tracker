@@ -71,18 +71,18 @@ class HomeViewModel: ViewModel() {
         _labels.value?.addAll(mutableListOf("food","electronic"))
         _description.value = "Test for desc"
         _maxPayment.value = 6000u
-        _balance.value = 5000u
-        _balancePercentage.value = (_balance.value!!.toInt() / _maxPayment.value!!.toInt()) * 100
+        _balance.value = 2560u
+        _balancePercentage.value = ((_balance.value!!.toFloat() / _maxPayment.value!!.toFloat())* 100).toInt()
     }
 
 
     // bank identifier variable
-    val title:          LiveData<String> = _title
-    val sum:            LiveData<Int> = _sum
-    val date:           LiveData<LocalDate> = _date
-    val labels:         LiveData<MutableList<String>> = _labels
-    val description:    LiveData<String> = _description
-    val balance:        LiveData<UInt> = _balance
-    val maxPayment:     LiveData<UInt> = _maxPayment
-    val balancePercentage:     LiveData<Int> = _balancePercentage
+    val title:                  LiveData<String> = _title
+    val sum:                    LiveData<Int> = _sum
+    val date:                   LiveData<LocalDate> = _date
+    val labels:                 LiveData<MutableList<String>> = _labels
+    val description:            LiveData<String> = _description
+    val balance:                LiveData<UInt> = _balance
+    val maxPayment:             LiveData<UInt> = _maxPayment
+    val balancePercentage:      LiveData<Int> = _balancePercentage
 }
