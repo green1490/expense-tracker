@@ -8,6 +8,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.expensetracker.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -38,6 +39,11 @@ class HomeFragment : Fragment() {
 
         val progressBar: ProgressBar = binding.progressBar
         progressBar.progress = homeViewModel.balancePercentage.value!!
+
+        val recyclerView = binding.recyclerView
+        val adapter = CustomAdapter(this.requireContext(), listOf())
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this.requireContext())
 
         return root
     }
