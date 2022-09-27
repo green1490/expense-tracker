@@ -2,5 +2,6 @@
     <string name="app_name">Expense tracker</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_setting">Settings</string>
+    <string name="home_button">Add</string>
 </resources>
