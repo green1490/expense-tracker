@@ -1,5 +1,6 @@
 package com.example.expensetracker.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.expensetracker.databinding.FragmentHomeBinding
+import com.example.expensetracker.ui.expense.Expense
 
 class HomeFragment : Fragment() {
 
@@ -45,6 +47,9 @@ class HomeFragment : Fragment() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this.requireContext())
 
+        val button = binding.button
+        button.setOnClickListener {newLayout()}
+
         return root
     }
 
@@ -54,5 +59,10 @@ class HomeFragment : Fragment() {
 //          it.write()
 //        }
         _binding = null
+    }
+
+    private fun newLayout() {
+        val intent = Intent(this.context, Expense::class.java)
+        startActivity(intent)
     }
 }
