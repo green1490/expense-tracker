@@ -16,8 +16,7 @@ class Tags : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         val recyclerView = findViewById<RecyclerView>(R.id.categories)
-        recyclerView.adapter = CategoryAdapter(this, listOf())
+        recyclerView.adapter = CategoryAdapter(this, mutableListOf())
         recyclerView.layoutManager = LinearLayoutManager(this)
-
     }
 }
