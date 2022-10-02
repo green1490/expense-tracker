@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import java.time.LocalDate
-import java.util.*
 
 class HomeViewModel: ViewModel() {
 
@@ -34,10 +33,6 @@ class HomeViewModel: ViewModel() {
 
     private val _maxPayment = MutableLiveData<UInt>().apply {
         value = UInt.MIN_VALUE
-    }
-
-    private val _balancePercentage = MutableLiveData<Int>().apply {
-        value = 0
     }
 
     fun setTitle(text:String) {
@@ -71,8 +66,7 @@ class HomeViewModel: ViewModel() {
         _labels.value?.addAll(mutableListOf("food","electronic"))
         _description.value = "Test for desc"
         _maxPayment.value = 6000u
-        _balance.value = 2560u
-        _balancePercentage.value = ((_balance.value!!.toFloat() / _maxPayment.value!!.toFloat())* 100).toInt()
+        _balance.value = 3000U
     }
 
 
@@ -84,5 +78,4 @@ class HomeViewModel: ViewModel() {
     val description:            LiveData<String> = _description
     val balance:                LiveData<UInt> = _balance
     val maxPayment:             LiveData<UInt> = _maxPayment
-    val balancePercentage:      LiveData<Int> = _balancePercentage
 }
