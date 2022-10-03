@@ -1,7 +1,7 @@
 package com.example.expensetracker.ui.expense
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.expensetracker.R
@@ -24,7 +24,8 @@ class Tags : AppCompatActivity() {
                 "shop",
                 "sport",
                 "transport",
-                "video game"
+                "video game",
+                "income"
             ),
             mapOf(
                 "education" to R.drawable.ic_education,
@@ -34,7 +35,8 @@ class Tags : AppCompatActivity() {
                 "shop" to R.drawable.ic_shop,
                 "sport" to R.drawable.ic_sport,
                 "transport" to R.drawable.ic_transport,
-                "video game" to R.drawable.ic_video_game
+                "video game" to R.drawable.ic_video_game,
+                "income" to R.drawable.ic_income
             )
         )
         recyclerView.layoutManager = LinearLayoutManager(this)

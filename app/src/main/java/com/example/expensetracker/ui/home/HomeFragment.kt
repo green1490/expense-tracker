@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.expensetracker.ExpenseData
 import com.example.expensetracker.databinding.FragmentHomeBinding
 import com.example.expensetracker.ui.expense.Expense
@@ -23,8 +22,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val _fileName:String = "history"
     private lateinit var homeViewModel:HomeViewModel
-    private var expense:MutableList<ExpenseData> = mutableListOf()
-    lateinit var recyclerView:RecyclerView
+    lateinit var adapter:CustomAdapter
 
     private val activityLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult(),
@@ -34,12 +32,10 @@ class HomeFragment : Fragment() {
             val category = result.data!!.getStringExtra("Category")?.trim()
             val description = result.data!!.getStringExtra("Description")?.trim()
             val icon = result.data!!.getIntExtra("Icon",0)
-            expense.add(ExpenseData(sum!!,category!!,description, icon))
-            if (expense.isNotEmpty()) {
-                homeViewModel.setBalance(homeViewModel.balance.value!!.minus(expense.last().sum.toUInt()))
-            }
+            adapter.addItem(ExpenseData(sum!!,category!!,description, icon))
 
-            TODO("Protect variable from underflow and save it")
+            homeViewModel.setBalance(homeViewModel.balance.value!!.minus(sum.toUInt()))
+
             val textView: TextView = binding.textHome
             textView.text = ((homeViewModel.balance.value!!.toFloat()
                     / homeViewModel.maxPayment.value!!.toFloat())*100).toInt().toString()
@@ -75,8 +71,8 @@ class HomeFragment : Fragment() {
         val button = binding.button
         button.setOnClickListener {newLayout()}
 
-        recyclerView = binding.recyclerView
-        val adapter = CustomAdapter(requireContext(), expense)
+        val recyclerView = binding.recyclerView
+        adapter = CustomAdapter(requireContext())
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(context)
 
@@ -95,10 +91,6 @@ class HomeFragment : Fragment() {
     private fun newLayout() {
         val intent = Intent(context, Expense::class.java)
         activityLauncher.launch(intent)
-    }
-
-    private fun updateProgressBar() {
-
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.expensetracker.ui.home
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.expensetracker.ExpenseData
 import com.example.expensetracker.R
 
-class CustomAdapter(private var ct:Context,private var tags:MutableList<ExpenseData>):RecyclerView.Adapter<CustomAdapter.CustomViewHolder>() {
+class CustomAdapter(private var ct:Context):RecyclerView.Adapter<CustomAdapter.CustomViewHolder>() {
+    val tags:MutableList<ExpenseData> = mutableListOf()
 
     class CustomViewHolder(itemView:View):RecyclerView.ViewHolder(itemView) {
         val textView: TextView
@@ -39,5 +41,12 @@ class CustomAdapter(private var ct:Context,private var tags:MutableList<ExpenseD
 
     override fun getItemCount(): Int {
         return tags.size
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun addItem(item:ExpenseData) {
+        tags.add(item)
+        //Refactor
+        this.notifyDataSetChanged()
     }
 }
