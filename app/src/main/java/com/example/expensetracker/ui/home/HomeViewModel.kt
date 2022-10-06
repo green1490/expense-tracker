@@ -27,8 +27,8 @@ class HomeViewModel: ViewModel() {
         value = String()
     }
 
-    private val _balance = MutableLiveData<UInt>().apply {
-        value = UInt.MIN_VALUE
+    private val _balance = MutableLiveData<Int>().apply {
+        value = 0
     }
 
     private val _maxPayment = MutableLiveData<UInt>().apply {
@@ -55,18 +55,14 @@ class HomeViewModel: ViewModel() {
         _description.value = text
     }
 
-    fun setBalance(balance:UInt) {
+    fun setBalance(balance:Int) {
         _balance.value = balance
     }
 
     init {
-        _title.value = "Test buying"
-        _sum.value = 4000
         _date.value = LocalDate.now()
-        _labels.value?.addAll(mutableListOf("food","electronic"))
-        _description.value = "Test for desc"
         _maxPayment.value = 6000u
-        _balance.value = 3000U
+        _balance.value = 3000
     }
 
 
@@ -76,6 +72,6 @@ class HomeViewModel: ViewModel() {
     val date:                   LiveData<LocalDate> = _date
     val labels:                 LiveData<MutableList<String>> = _labels
     val description:            LiveData<String> = _description
-    val balance:                LiveData<UInt> = _balance
+    val balance:                LiveData<Int> = _balance
     val maxPayment:             LiveData<UInt> = _maxPayment
 }

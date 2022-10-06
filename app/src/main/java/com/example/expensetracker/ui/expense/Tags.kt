@@ -25,7 +25,6 @@ class Tags : AppCompatActivity() {
                 "sport",
                 "transport",
                 "video game",
-                "income"
             ),
             mapOf(
                 "education" to R.drawable.ic_education,
@@ -36,7 +35,6 @@ class Tags : AppCompatActivity() {
                 "sport" to R.drawable.ic_sport,
                 "transport" to R.drawable.ic_transport,
                 "video game" to R.drawable.ic_video_game,
-                "income" to R.drawable.ic_income
             )
         )
         recyclerView.layoutManager = LinearLayoutManager(this)
