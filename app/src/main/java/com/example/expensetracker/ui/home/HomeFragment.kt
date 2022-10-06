@@ -1,5 +1,6 @@
 package com.example.expensetracker.ui.home
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -8,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -19,9 +19,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.expensetracker.ExpenseData
 import com.example.expensetracker.databinding.FragmentHomeBinding
 import com.example.expensetracker.ui.expense.Expense
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.FileNotFoundException
+import java.lang.reflect.Type
+
 
 class HomeFragment : Fragment() {
     //kiírás onStop new item flag-el
@@ -29,7 +35,8 @@ class HomeFragment : Fragment() {
     private lateinit var homeViewModel:HomeViewModel
     lateinit var adapter:CustomAdapter
     val filename:String = "history"
-    var jsonObject:JSONObject = JSONObject()
+    val expenses:MutableList<ExpenseData> = mutableListOf()
+
 
 
     private val activityLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
@@ -44,39 +51,18 @@ class HomeFragment : Fragment() {
 
 
 
-            jsonObject.put("Sum",sum)
-            jsonObject.put("Category",category)
-            jsonObject.put("Description",description ?: "")
-            jsonObject.put("Icon",icon)
 
-//            lifecycleScope.launch(Dispatchers.IO) {
-//                val jsonString = jsonObject.toString()
-//                    requireContext().openFileOutput(filename, Context.MODE_PRIVATE).use {
-//                        it.write(jsonString.toByteArray())
-//                }
-//            }
-
-
-//            lifecycleScope.launch(Dispatchers.IO) {
-//                with(sharedPreferences?.edit()) {
-//                    this?.putString("Sum",sum)
-//                    this?.putString("Category",category)
-//                    this?.putString("Description",description ?: "")
-//                    this?.putInt("Icon",icon)
-//                    this?.apply()
-//                }
-//            }
-
+            expenses.add(ExpenseData(sum, category!!,description,icon,isChecked))
+            val json = GsonBuilder().setPrettyPrinting().create().toJson(expenses)
             lifecycleScope.launch(Dispatchers.IO) {
-                val input = requireContext().openFileInput(filename).bufferedReader().read().toString()
-                jsonObject = JSONObject(input)
+                    requireContext().openFileOutput(filename, Context.MODE_PRIVATE).use {
+                        it.write(json.toByteArray())
+                }
             }
 
-            //checkolni, hogy a fájl létezik és több jsonObject tárolása
-            Toast.makeText(context,jsonObject["Sum"].toString(),Toast.LENGTH_SHORT).show()
 
-
-            adapter.addItem(ExpenseData(sum,category!!,description, icon))
+            // ez majd a onstartba hozzáadni
+            adapter.addItem(ExpenseData(sum, category,description, icon,isChecked))
 
             if(!isChecked)
                 homeViewModel.setBalance(homeViewModel.balance.value!!.minus(sum.toInt()))
@@ -132,14 +118,37 @@ class HomeFragment : Fragment() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(context)
 
+        lifecycleScope.launch(Dispatchers.IO) {
+            val br:BufferedReader? = try {
+                 requireContext().openFileInput(filename).bufferedReader()
+            }
+            catch (e:FileNotFoundException) {
+                null
+            }
+            if (br != null) {
+                val json = Gson()
+                val type: Type = object : TypeToken<MutableList<ExpenseData?>?>() {}.type
+                val models: MutableList<ExpenseData> = json.fromJson(br, type)
+                models.forEach { expense ->
+                    adapter.addItem(expense)
+                }
+            }
+        }
+
         return root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        for (expense:ExpenseData in expenses) {
+            if(expense.isChecked) {
+
+            }
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-//        context.openFileOutput(_fileName, Context.MODE_PRIVATER).use {
-//          it.write()
-//        }
         _binding = null
     }
 

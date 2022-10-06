@@ -4,5 +4,6 @@ data class ExpenseData(
     var sum:        String,
     var category:   String,
     var description:String?,
-    var Icon:       Int
+    var icon:       Int,
+    var isChecked:  Boolean
 )

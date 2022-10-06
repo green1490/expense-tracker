@@ -36,7 +36,7 @@ class CustomAdapter(private var ct:Context):RecyclerView.Adapter<CustomAdapter.C
             .append(tags[position].category.plus(" "))
             .append(tags[position].description ?: "")
         holder.textView.text = sb.toString()
-        holder.imageView.setImageResource(tags[position].Icon)
+        holder.imageView.setImageResource(tags[position].icon)
     }
 
     override fun getItemCount(): Int {
