@@ -53,10 +53,14 @@ class HomeFragment : Fragment() {
                 sum, category!!,description, icon,isChecked,homeViewModel.balance.value!!
             ))
 
+
             if(!isChecked)
                 homeViewModel.setBalance(homeViewModel.balance.value!!.minus(sum.toInt()))
             else
                 homeViewModel.setBalance(homeViewModel.balance.value!!.plus(sum.toInt()))
+
+            homeViewModel.setPercentage(((homeViewModel.balance.value!!.toFloat()
+                    / homeViewModel.maxPayment.value!!.toFloat())*100).toInt())
 
             expenses.add(ExpenseData(sum, category,description,icon,isChecked,homeViewModel.balance.value!!))
 
@@ -67,17 +71,19 @@ class HomeFragment : Fragment() {
                 }
             }
 
-            val textView: TextView = binding.textHome
-            textView.text = ((homeViewModel.balance.value!!.toFloat()
-                    / homeViewModel.maxPayment.value!!.toFloat())*100).toInt().toString()
+            val textViewPercentage: TextView = binding.textPercentage
+            textViewPercentage.text = homeViewModel.percentage.value.toString()
+
             val progressBar: ProgressBar = binding.progressBar
-            progressBar.progress = ((homeViewModel.balance.value!!.toFloat()
-                    / homeViewModel.maxPayment.value!!.toFloat())*100).toInt()
+            progressBar.progress = homeViewModel.percentage.value!!
+
+            val textViewBalance:TextView = binding.textViewBalance
+            textViewBalance.text = homeViewModel.balance.value!!.toString()
 
             if(homeViewModel.balance.value!! < 0)
-                textView.setTextColor(Color.RED)
+                textViewPercentage.setTextColor(Color.RED)
             else
-                textView.setTextColor(Color.WHITE)
+                textViewPercentage.setTextColor(Color.WHITE)
         }
     }
 
@@ -99,21 +105,9 @@ class HomeFragment : Fragment() {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root:View =     binding.root
-        val balance =       binding.textViewBalance
-        val textView =      binding.textHome
-        val progressBar =   binding.progressBar
         val button =        binding.button
         val recyclerView =  binding.recyclerView
 
-        textView.text = ((homeViewModel.balance.value!!.toFloat()
-                / homeViewModel.maxPayment.value!!.toFloat())*100).toInt().toString()
-
-        progressBar.progress = ((homeViewModel.balance.value!!.toFloat()
-                / homeViewModel.maxPayment.value!!.toFloat())*100).toInt()
-
-        homeViewModel.balance.observe(viewLifecycleOwner) {
-            balance.text = it.toString()
-        }
 
         button.setOnClickListener {newLayout()}
 
@@ -134,6 +128,7 @@ class HomeFragment : Fragment() {
                 val models: MutableList<ExpenseData> = json.fromJson(br, type)
                 models.forEach { expense ->
                     adapter.addItem(expense)
+                    expenses.add(expense)
                 }
             }
         }
@@ -143,7 +138,19 @@ class HomeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        //start a fragment to ask for current balance
         homeViewModel.setBalance(if(expenses.size == 0)  0  else expenses.last().balance)
+        homeViewModel.setPercentage(((homeViewModel.balance.value!!.toFloat()
+                / homeViewModel.maxPayment.value!!.toFloat())*100).toInt())
+
+        val textViewBalance =       binding.textViewBalance
+        val progressBarPercentage = binding.progressBar
+        val textViewPercentage =    binding.textPercentage
+
+        progressBarPercentage.progress = homeViewModel.percentage.value!!
+        textViewBalance.text = homeViewModel.balance.value.toString()
+        textViewPercentage.text = homeViewModel.percentage.value!!.toString()
+
     }
 
     override fun onDestroyView() {

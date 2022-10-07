@@ -19,9 +19,17 @@ class HomeViewModel: ViewModel() {
         value = UInt.MIN_VALUE
     }
 
+    private val _percentage = MutableLiveData<Int>().apply {
+        value = 0
+    }
+
 
     fun setDate(date:LocalDate) {
         _date.value = date
+    }
+
+    fun setPercentage(percentage:Int) {
+        _percentage.value = percentage
     }
 
     fun setBalance(balance:Int) {
@@ -31,11 +39,11 @@ class HomeViewModel: ViewModel() {
     init {
         _date.value = LocalDate.now()
         _maxPayment.value = 6000u
-        _balance.value = 3000
     }
 
 
     // bank identifier variable
-    val balance:                LiveData<Int> = _balance
-    val maxPayment:             LiveData<UInt> = _maxPayment
+    val balance:    LiveData<Int> = _balance
+    val maxPayment: LiveData<UInt> = _maxPayment
+    val percentage: LiveData<Int> = _percentage
 }
