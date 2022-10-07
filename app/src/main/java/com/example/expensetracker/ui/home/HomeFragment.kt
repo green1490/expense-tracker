@@ -25,17 +25,20 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
+import java.io.File
 import java.io.FileNotFoundException
 import java.lang.reflect.Type
 
 
 class HomeFragment : Fragment() {
-    //To DO: actually balance mutatása és számolása
+    //To DO:Sensor,layout rework,setting,localisation
     private var _binding: FragmentHomeBinding? = null
     private lateinit var homeViewModel:HomeViewModel
     lateinit var adapter:CustomAdapter
     val filename:String = "history"
     val expenses:MutableList<ExpenseData> = mutableListOf()
+    lateinit var br:BufferedReader
+
 
 
 
@@ -116,20 +119,21 @@ class HomeFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         lifecycleScope.launch(Dispatchers.IO) {
-            val br:BufferedReader? = try {
+            br = try {
                  requireContext().openFileInput(filename).bufferedReader()
             }
             catch (e:FileNotFoundException) {
-                null
+                File(filename).createNewFile()
+                File(filename).bufferedReader()
             }
-            if (br != null) {
-                val json = Gson()
-                val type: Type = object : TypeToken<MutableList<ExpenseData?>?>() {}.type
-                val models: MutableList<ExpenseData> = json.fromJson(br, type)
-                models.forEach { expense ->
-                    adapter.addItem(expense)
-                    expenses.add(expense)
-                }
+
+            val json = Gson()
+            val type: Type = object : TypeToken<MutableList<ExpenseData?>?>() {}.type
+            val models: MutableList<ExpenseData> = json.fromJson(br, type)
+            models.forEach { expense ->
+                adapter.addItem(expense)
+                expenses.add(expense)
+
             }
         }
 
@@ -155,6 +159,7 @@ class HomeFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        br.close()
         _binding = null
     }
 
