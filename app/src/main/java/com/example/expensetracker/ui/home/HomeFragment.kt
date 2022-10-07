@@ -30,7 +30,7 @@ import java.lang.reflect.Type
 
 
 class HomeFragment : Fragment() {
-    //kiírás onStop new item flag-el
+    //To DO: actually balance mutatása és számolása
     private var _binding: FragmentHomeBinding? = null
     private lateinit var homeViewModel:HomeViewModel
     lateinit var adapter:CustomAdapter
@@ -49,25 +49,23 @@ class HomeFragment : Fragment() {
             val icon = result.data!!.getIntExtra("Icon",0)
             val isChecked = result.data!!.getBooleanExtra("Checked",false)
 
-
-
-
-            expenses.add(ExpenseData(sum, category!!,description,icon,isChecked))
-            val json = GsonBuilder().setPrettyPrinting().create().toJson(expenses)
-            lifecycleScope.launch(Dispatchers.IO) {
-                    requireContext().openFileOutput(filename, Context.MODE_PRIVATE).use {
-                        it.write(json.toByteArray())
-                }
-            }
-
-
-            // ez majd a onstartba hozzáadni
-            adapter.addItem(ExpenseData(sum, category,description, icon,isChecked))
+            adapter.addItem(ExpenseData(
+                sum, category!!,description, icon,isChecked,homeViewModel.balance.value!!
+            ))
 
             if(!isChecked)
                 homeViewModel.setBalance(homeViewModel.balance.value!!.minus(sum.toInt()))
             else
                 homeViewModel.setBalance(homeViewModel.balance.value!!.plus(sum.toInt()))
+
+            expenses.add(ExpenseData(sum, category,description,icon,isChecked,homeViewModel.balance.value!!))
+
+            val json = GsonBuilder().setPrettyPrinting().create().toJson(expenses)
+            lifecycleScope.launch(Dispatchers.IO) {
+                requireContext().openFileOutput(filename, Context.MODE_PRIVATE).use {
+                    it.write(json.toByteArray())
+                }
+            }
 
             val textView: TextView = binding.textHome
             textView.text = ((homeViewModel.balance.value!!.toFloat()
@@ -100,20 +98,25 @@ class HomeFragment : Fragment() {
             ViewModelProvider(this).get(HomeViewModel::class.java)
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        val root:View =     binding.root
+        val balance =       binding.textViewBalance
+        val textView =      binding.textHome
+        val progressBar =   binding.progressBar
+        val button =        binding.button
+        val recyclerView =  binding.recyclerView
 
-        val textView: TextView = binding.textHome
         textView.text = ((homeViewModel.balance.value!!.toFloat()
                 / homeViewModel.maxPayment.value!!.toFloat())*100).toInt().toString()
 
-        val progressBar: ProgressBar = binding.progressBar
         progressBar.progress = ((homeViewModel.balance.value!!.toFloat()
                 / homeViewModel.maxPayment.value!!.toFloat())*100).toInt()
 
-        val button = binding.button
+        homeViewModel.balance.observe(viewLifecycleOwner) {
+            balance.text = it.toString()
+        }
+
         button.setOnClickListener {newLayout()}
 
-        val recyclerView = binding.recyclerView
         adapter = CustomAdapter(requireContext())
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -140,11 +143,7 @@ class HomeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        for (expense:ExpenseData in expenses) {
-            if(expense.isChecked) {
-
-            }
-        }
+        homeViewModel.setBalance(if(expenses.size == 0)  0  else expenses.last().balance)
     }
 
     override fun onDestroyView() {
