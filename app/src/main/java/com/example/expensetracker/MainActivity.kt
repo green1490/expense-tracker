@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private var cancellationSignal:CancellationSignal? = null
-    private val authentetionCallBack:BiometricPrompt.AuthenticationCallback
+    private val authenticationCallBack:BiometricPrompt.AuthenticationCallback
     get() =
         object: BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) {
@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                 exitProcess(0)
             }.build()
 
-        biometricPrompt.authenticate(getCancellationSignal(),mainExecutor,authentetionCallBack)
+        biometricPrompt.authenticate(getCancellationSignal(),mainExecutor,authenticationCallBack)
 
 
         binding = ActivityMainBinding.inflate(layoutInflater)
