@@ -1,6 +1,5 @@
 package com.example.expensetracker.ui.home
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.expensetracker.ExpenseData
 import com.example.expensetracker.R
 
-class CustomAdapter(private var ct:Context):RecyclerView.Adapter<CustomAdapter.CustomViewHolder>() {
-    val tags:MutableList<ExpenseData> = mutableListOf()
+class CustomAdapter(private var ct:Context,private var tags:MutableList<ExpenseData>):RecyclerView.Adapter<CustomAdapter.CustomViewHolder>() {
+//    val tags:MutableList<ExpenseData> = mutableListOf()
+    var copytag = tags
 
     class CustomViewHolder(itemView:View):RecyclerView.ViewHolder(itemView) {
         val textView: TextView
@@ -32,21 +32,15 @@ class CustomAdapter(private var ct:Context):RecyclerView.Adapter<CustomAdapter.C
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         val sb = StringBuilder()
-        sb.append(tags[position].sum.plus(" "))
-            .append(tags[position].category.plus(" "))
-            .append(tags[position].description ?: "")
+        sb.append(copytag[position].sum.plus(" "))
+            .append(copytag[position].category.plus(" "))
+            .append(copytag[position].description ?: "")
         holder.textView.text = sb.toString()
-        holder.imageView.setImageResource(tags[position].icon)
+        holder.imageView.setImageResource(copytag[position].icon)
     }
 
     override fun getItemCount(): Int {
-        return tags.size
+        return copytag.size
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun addItem(item:ExpenseData) {
-        tags.add(item)
-        //Refactor
-        this.notifyDataSetChanged()
-    }
 }

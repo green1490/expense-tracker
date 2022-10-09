@@ -25,7 +25,6 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
-import java.io.File
 import java.io.FileNotFoundException
 import java.lang.reflect.Type
 
@@ -38,6 +37,7 @@ class HomeFragment : Fragment() {
     val filename:String = "history"
     val expenses:MutableList<ExpenseData> = mutableListOf()
     lateinit var br:BufferedReader
+    var wasReaded = false
 
 
 
@@ -52,11 +52,6 @@ class HomeFragment : Fragment() {
             val icon = result.data!!.getIntExtra("Icon",0)
             val isChecked = result.data!!.getBooleanExtra("Checked",false)
 
-            adapter.addItem(ExpenseData(
-                sum, category!!,description, icon,isChecked,homeViewModel.balance.value!!
-            ))
-
-
             if(!isChecked)
                 homeViewModel.setBalance(homeViewModel.balance.value!!.minus(sum.toInt()))
             else
@@ -65,7 +60,8 @@ class HomeFragment : Fragment() {
             homeViewModel.setPercentage(((homeViewModel.balance.value!!.toFloat()
                     / homeViewModel.maxPayment.value!!.toFloat())*100).toInt())
 
-            expenses.add(ExpenseData(sum, category,description,icon,isChecked,homeViewModel.balance.value!!))
+            expenses.add(ExpenseData(sum, category!!,description,icon,isChecked,homeViewModel.balance.value!!))
+            adapter.notifyDataSetChanged()
 
             val json = GsonBuilder().setPrettyPrinting().create().toJson(expenses)
             lifecycleScope.launch(Dispatchers.IO) {
@@ -100,9 +96,6 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-
-
-
         homeViewModel =
             ViewModelProvider(this).get(HomeViewModel::class.java)
 
@@ -114,29 +107,26 @@ class HomeFragment : Fragment() {
 
         button.setOnClickListener {newLayout()}
 
-        adapter = CustomAdapter(requireContext())
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(context)
-
         lifecycleScope.launch(Dispatchers.IO) {
             br = try {
                  requireContext().openFileInput(filename).bufferedReader()
             }
             catch (e:FileNotFoundException) {
-                File(filename).createNewFile()
-                File(filename).bufferedReader()
+                requireContext().openFileOutput(filename,Context.MODE_PRIVATE).close()
+                requireContext().openFileInput(filename).bufferedReader()
             }
 
+            val type: Type = object : TypeToken<MutableList<ExpenseData>>() {}.type
             val json = Gson()
-            val type: Type = object : TypeToken<MutableList<ExpenseData?>?>() {}.type
-            val models: MutableList<ExpenseData> = json.fromJson(br, type)
-            models.forEach { expense ->
-                adapter.addItem(expense)
-                expenses.add(expense)
-
+            val models: MutableList<ExpenseData>? = json.fromJson(br, type)
+            if(!wasReaded) {
+                wasReaded = true
+                expenses.addAll(models ?: mutableListOf())
             }
         }
-
+        adapter = CustomAdapter(requireContext(),expenses)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(context)
         return root
     }
 

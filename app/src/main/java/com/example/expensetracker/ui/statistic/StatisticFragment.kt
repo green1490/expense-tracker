@@ -35,6 +35,7 @@ class StatisticFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
     private val expenses:MutableList<ExpenseData> = mutableListOf()
+    private val expensesDict:MutableMap<String,Int> = mutableMapOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,13 +61,26 @@ class StatisticFragment : Fragment() {
 
             val json = Gson()
             val type: Type = object : TypeToken<MutableList<ExpenseData?>?>() {}.type
-            val models: MutableList<ExpenseData> = json.fromJson(br, type)
+            val models: MutableList<ExpenseData>? = json.fromJson(br, type)
             val pieEntries: MutableList<PieEntry> = mutableListOf()
-            models.forEach { expense ->
-                expenses.add(expense)
-                pieEntries.add(PieEntry(expense.sum.toFloat(),expense.category))
-
+            models?.forEach { expense ->
+                if (expense.category != "Income") {
+                    expenses.add(expense)
+                    val value = expensesDict[expense.category]
+                    if(value == null) {
+                        expensesDict[expense.category] = expense.sum.toInt()
+                    }
+                    else {
+                        expensesDict[expense.category] = value + expense.sum.toInt()
+                    }
+                    //pieEntries.add(PieEntry(expense.sum.toFloat(),expense.category))
+                }
             }
+
+            expensesDict.forEach { (key, value) ->
+                pieEntries.add(PieEntry(value.toFloat(),key))
+            }
+
             return@async pieEntries
         }
         lifecycleScope.launch(Dispatchers.Main) {
@@ -85,7 +99,6 @@ class StatisticFragment : Fragment() {
         val categoryPieChart = binding.categoryPieChart
 
         val pieDataSet = PieDataSet(pieEntries.await(),"expenses")
-        pieDataSet.valueTextSize = 16f
         pieDataSet.colors = ColorTemplate.JOYFUL_COLORS.toList()
         pieDataSet.valueTextColor = Color.BLACK
 
