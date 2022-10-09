@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val biometricPrompt = BiometricPrompt.Builder(this)
-            .setTitle("Title of prompt")
+            .setTitle("Expense authentication")
             .setSubtitle("Authentication is required")
             .setDescription("This app uses fingerprint to keep data secure!")
             .setNegativeButton("Cancel",this.mainExecutor) { dialog, which ->

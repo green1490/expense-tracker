@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.expensetracker.ExpenseData
 import com.example.expensetracker.databinding.FragmentStatisticBinding
 import com.github.mikephil.charting.data.PieData
@@ -15,6 +16,10 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileNotFoundException
@@ -24,7 +29,6 @@ class StatisticFragment : Fragment() {
 
     private var _binding: FragmentStatisticBinding? = null
     private val filename = "history"
-    private val pieData: MutableList<PieEntry> = mutableListOf()
     lateinit var br:BufferedReader
 
     // This property is only valid between onCreateView and
@@ -43,30 +47,44 @@ class StatisticFragment : Fragment() {
         _binding = FragmentStatisticBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        br = try {
-            requireContext().openFileInput(filename).bufferedReader()
+        val pieData = lifecycleScope.async(Dispatchers.IO) {
+
+            val br = try {
+                requireContext().openFileInput(filename).bufferedReader()
+            }
+            catch (e:FileNotFoundException) {
+                File(filename).createNewFile()
+                File(filename).bufferedReader()
+            }
+
+
+            val json = Gson()
+            val type: Type = object : TypeToken<MutableList<ExpenseData?>?>() {}.type
+            val models: MutableList<ExpenseData> = json.fromJson(br, type)
+            val pieEntries: MutableList<PieEntry> = mutableListOf()
+            models.forEach { expense ->
+                expenses.add(expense)
+                pieEntries.add(PieEntry(expense.sum.toFloat(),expense.category))
+
+            }
+            return@async pieEntries
         }
-        catch (e:FileNotFoundException) {
-            File(filename).createNewFile()
-            File(filename).bufferedReader()
+        lifecycleScope.launch(Dispatchers.Main) {
+            setUpChart(pieData)
         }
+        return root
+    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        br.close()
+        _binding = null
+    }
 
-        val json = Gson()
-        val type: Type = object : TypeToken<MutableList<ExpenseData?>?>() {}.type
-        val models: MutableList<ExpenseData> = json.fromJson(br, type)
-        models.forEach { expense ->
-            expenses.add(expense)
-
-        }
-
-        expenses.forEach { expense ->
-            pieData.add(PieEntry(expense.sum.toFloat(),expense.category))
-        }
-
+    private suspend fun setUpChart(pieEntries:Deferred<MutableList<PieEntry>>) {
         val categoryPieChart = binding.categoryPieChart
 
-        val pieDataSet = PieDataSet(pieData,"expenses")
+        val pieDataSet = PieDataSet(pieEntries.await(),"expenses")
         pieDataSet.valueTextSize = 16f
         pieDataSet.colors = ColorTemplate.JOYFUL_COLORS.toList()
         pieDataSet.valueTextColor = Color.BLACK
@@ -77,13 +95,5 @@ class StatisticFragment : Fragment() {
         categoryPieChart.description.isEnabled = false
         categoryPieChart.centerText = "category"
         categoryPieChart.invalidate()
-
-        return root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        br.close()
-        _binding = null
     }
 }
