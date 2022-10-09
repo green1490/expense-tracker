@@ -49,7 +49,7 @@ class StatisticFragment : Fragment() {
 
         val pieData = lifecycleScope.async(Dispatchers.IO) {
 
-            val br = try {
+             br = try {
                 requireContext().openFileInput(filename).bufferedReader()
             }
             catch (e:FileNotFoundException) {
