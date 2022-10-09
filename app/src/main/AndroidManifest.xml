@@ -11,6 +11,14 @@
         android:supportsRtl="false"
         android:theme="@style/Theme.ExpenseTracker">
         <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_settings">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ui.expense.Tags"
             android:exported="false">
             <meta-data
