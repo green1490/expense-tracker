@@ -19,6 +19,7 @@
 
     <fragment
         android:id="@+id/navigation_setting"
-        android:name="com.example.expensetracker.ui.settings.SettingsFragment"
-        android:label="@string/title_setting" />
+        android:name="com.example.expensetracker.ui.settings.SettingFragmentHelper"
+        android:label="@string/title_setting"
+        tools:layout="@layout/fragment_settings"/>
 </navigation>
