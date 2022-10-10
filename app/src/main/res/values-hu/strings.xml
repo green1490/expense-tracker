@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kiadás kezelő</string>
+    <string name="title_home">Otthon</string>
+    <string name="title_setting">Beállítás</string>
+    <string name="home_button">Hozzá add</string>
+    <string name="title_statistic">Statisztika</string>
+
+    <string-array name="language_entries">
+        <item>Angol</item>
+        <item>Magyar</item>
+    </string-array>
+
+    <string-array name="language_values">
+        <item>english</item>
+        <item>hungarian</item>
+    </string-array>
+
+    <string-array name="dark_mode_entries">
+        <item>Világós mód kiválasztása</item>
+        <item>Sötét mód kiválasztása</item>
+    </string-array>
+
+    <string-array name="dark_mode_values">
+        <item>MODE_NIGHT_NO</item>
+        <item>MODE_NIGHT_YES</item>
+    </string-array>
+
+    <!-- Preference Titles -->
+    <string name="ui">UI</string>
+    <!--Language Preferences-->
+    <string name="language_title">Nyelv</string>
+    <string name="language_header">Nyelv</string>
+    <string name="language_key">nyelv</string>
+
+    <!-- Theme Preferences -->
+    <string name="dark_mode">Sőtét</string>
+    <string name="dark_mode_def_value">MODE_NIGHT_FOLLOW_SYSTEM</string>
+
+    <!-- Misc Preferences -->
+    <string name="about_title">Rólam</string>
+    <string name="theme">Téma</string>
+    <string name="education">oktatás</string>
+    <string name="food">étel</string>
+    <string name="house">ház</string>
+    <string name="injury">sérülés</string>
+    <string name="shop">bolt</string>
+    <string name="sport">sport</string>
+    <string name="transport">utazás</string>
+    <string name="video_game">videó játék</string>
+    <string name="description">Leírás</string>
+    <string name="save">Mentás</string>
+    <string name="category">Kategória:</string>
+    <string name="income">Jövedelem</string>
+    <string name="expense">Kiadás</string>
+
+    <!-- Finger sensor -->
+    <string name="expense_authentication">Kiadás követő hitelesítés!</string>
+    <string name="subtitle">Hitelesítés szükséges!</string>
+    <string name="auth_description">Az app ujjlenyomatokat használ, hogy biztonságossá tegye az adatokat!</string>
+    <string name="cancel">Vissza</string>
+    <string name="auth_cancelled">A hitelesítés törlődött!</string>
+    <string name="auth_error">"Hitelesítés hiba: "</string>
+    <string name="auth_success">Sikeres hitelesítés!</string>
+    <string name="auth_cancelled_user">Hitelesítést tőrőlte a felhasználó!</string>
+    <string name="finger_not_enabled">Ujjlenyomat hitelesítés nincs elfogadva!</string>
+</resources>

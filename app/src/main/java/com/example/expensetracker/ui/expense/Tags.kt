@@ -18,23 +18,24 @@ class Tags : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.categories)
         recyclerView.adapter = CategoryAdapter(
             this, mutableListOf(
-                "education",
-                "food","house",
-                "injury",
-                "shop",
-                "sport",
-                "transport",
-                "video game",
+                getString(R.string.education),
+                getString(R.string.food),
+                getString(R.string.house),
+                getString(R.string.injury),
+                getString(R.string.shop),
+                getString(R.string.sport),
+                getString(R.string.transport),
+                getString(R.string.video_game),
             ),
             mapOf(
-                "education" to R.drawable.ic_education,
-                "food" to R.drawable.ic_food,
-                "house" to R.drawable.ic_house,
-                "injury" to R.drawable.ic_injury,
-                "shop" to R.drawable.ic_shop,
-                "sport" to R.drawable.ic_sport,
-                "transport" to R.drawable.ic_transport,
-                "video game" to R.drawable.ic_video_game,
+                getString(R.string.education) to R.drawable.ic_education,
+                getString(R.string.food) to R.drawable.ic_food,
+                getString(R.string.house) to R.drawable.ic_house,
+                getString(R.string.injury) to R.drawable.ic_injury,
+                getString(R.string.shop) to R.drawable.ic_shop,
+                getString(R.string.sport) to R.drawable.ic_sport,
+                getString(R.string.transport) to R.drawable.ic_transport,
+                getString(R.string.video_game) to R.drawable.ic_video_game,
             )
         )
         recyclerView.layoutManager = LinearLayoutManager(this)

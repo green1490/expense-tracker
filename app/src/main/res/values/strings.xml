@@ -1,25 +1,44 @@
 <resources>
     <string name="app_name">Expense tracker</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
     <string name="title_setting">Settings</string>
     <string name="home_button">Add</string>
     <string name="title_statistic">Statistics</string>
-    <string name="title_activity_settings">SettingsActivity</string>
 
     <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
+    <string name="ui" translatable="false">UI</string>
+    <!--Language Preferences-->
+    <string name="language_title">Language</string>
+    <string name="language_header">Language</string>
+    <string name="language_key">language</string>
 
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
+    <!-- Theme Preferences -->
+    <string name="dark_mode">Dark</string>
+    <string name="dark_mode_def_value" translatable="false">MODE_NIGHT_FOLLOW_SYSTEM</string>
 
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <string name="settings">Settings</string>
+    <!-- Misc Preferences -->
+    <string name="about_title">About me</string>
+    <string name="theme">Theme</string>
+    <string name="education">education</string>
+    <string name="food">food</string>
+    <string name="house">house</string>
+    <string name="injury">injury</string>
+    <string name="shop">shop</string>
+    <string name="sport">sport</string>
+    <string name="transport">transport</string>
+    <string name="video_game">video game</string>
+    <string name="description">Description</string>
+    <string name="save">Save</string>
+    <string name="category">Category:</string>
+    <string name="income">Income</string>
+    <string name="expense">Expense</string>
+    <string name="expense_authentication">Expense authentication</string>
+    <string name="subtitle">Authentication is required</string>
+    <string name="auth_description">This app uses fingerprint to keep data secure!</string>
+    <string name="cancel">Cancel</string>
+    <string name="auth_cancelled">Authentication cancelled</string>
+    <string name="auth_error">"Authentication error: "</string>
+    <string name="auth_success">Authentication success!</string>
+    <string name="auth_cancelled_user">Authentication was cancelled by the user!</string>
+    <string name="finger_not_enabled">Fingerprint authentication is not enabled!</string>
 </resources>
