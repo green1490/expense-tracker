@@ -10,9 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.expensetracker.ExpenseData
 import com.example.expensetracker.R
 
-class CustomAdapter(private var ct:Context,private var tags:MutableList<ExpenseData>):RecyclerView.Adapter<CustomAdapter.CustomViewHolder>() {
-//    val tags:MutableList<ExpenseData> = mutableListOf()
-    var copytag = tags
+class CustomAdapter(private var ct: Context, tags: MutableList<ExpenseData>) :
+    RecyclerView.Adapter<CustomAdapter.CustomViewHolder>() {
+
+    //    val tags:MutableList<ExpenseData> = mutableListOf()
+    var copytag: MutableList<ExpenseData> = tags
 
     class CustomViewHolder(itemView:View):RecyclerView.ViewHolder(itemView) {
         val textView: TextView
@@ -41,6 +43,16 @@ class CustomAdapter(private var ct:Context,private var tags:MutableList<ExpenseD
 
     override fun getItemCount(): Int {
         return copytag.size
+    }
+
+    fun clearItems() {
+        val size = copytag.size
+        copytag.clear()
+        notifyItemRangeRemoved(0,size)
+    }
+
+    fun returnExpenses():MutableList<ExpenseData> {
+        return copytag
     }
 
 }

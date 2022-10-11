@@ -1,5 +1,6 @@
 package com.example.expensetracker.ui.home
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.expensetracker.ExpenseData
 import com.example.expensetracker.databinding.FragmentHomeBinding
@@ -32,15 +34,16 @@ class HomeFragment : Fragment() {
     //To DO:Sensor,layout rework,setting,localisation
     private var _binding: FragmentHomeBinding? = null
     private lateinit var homeViewModel:HomeViewModel
-    lateinit var adapter:CustomAdapter
-    val filename:String = "history"
-    val expenses:MutableList<ExpenseData> = mutableListOf()
-    lateinit var br:BufferedReader
-    var wasReaded = false
+    private lateinit var adapter:CustomAdapter
+    private val filename:String = "history"
+    private val expenses:MutableList<ExpenseData> = mutableListOf()
+    private lateinit var br:BufferedReader
+    private var wasRead = false
 
 
 
 
+    @SuppressLint("NotifyDataSetChanged")
     private val activityLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult(),
     ) { result ->
@@ -62,7 +65,8 @@ class HomeFragment : Fragment() {
             expenses.add(ExpenseData(sum, category!!,description,icon,isChecked,homeViewModel.balance.value!!))
             adapter.notifyDataSetChanged()
 
-            val json = GsonBuilder().setPrettyPrinting().create().toJson(expenses)
+
+            val json = GsonBuilder().setPrettyPrinting().create().toJson(adapter.returnExpenses())
             lifecycleScope.launch(Dispatchers.IO) {
                 requireContext().openFileOutput(filename, Context.MODE_PRIVATE).use {
                     it.write(json.toByteArray())
@@ -90,18 +94,47 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+
+        val maxPayment = sharedPreferences.getString("max_payment","0")
+        val errNumber = 100000
+        val maxPaymentNumber = try {
+            maxPayment?.toInt() ?: errNumber
+        }
+        catch(e:NumberFormatException) {
+            errNumber
+        }
+
         homeViewModel =
             ViewModelProvider(this).get(HomeViewModel::class.java)
 
+        if (maxPayment != null) {
+            homeViewModel.setMaxPayment(maxPaymentNumber)
+        }
+
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        val textViewBalance =       binding.textViewBalance
+        val progressBarPercentage = binding.progressBar
+        val textViewPercentage =    binding.textPercentage
+
         val root:View =     binding.root
         val button =        binding.button
         val recyclerView =  binding.recyclerView
+        val imageButton =   binding.imageButtonDelete
 
 
         button.setOnClickListener {newLayout()}
 
-        lifecycleScope.launch(Dispatchers.IO) {
+        imageButton.setOnClickListener {
+            adapter.clearItems()
+            homeViewModel.setBalance(0)
+            homeViewModel.setPercentage(0)
+            textViewBalance.text =              homeViewModel.balance.value!!.toString()
+            progressBarPercentage.progress =    homeViewModel.percentage.value!!.toInt()
+            textViewPercentage.text =           homeViewModel.percentage.value.toString()
+        }
+
+        val fileReadingJob = lifecycleScope.launch(Dispatchers.IO) {
             br = try {
                  requireContext().openFileInput(filename).bufferedReader()
             }
@@ -113,31 +146,27 @@ class HomeFragment : Fragment() {
             val type: Type = object : TypeToken<MutableList<ExpenseData>>() {}.type
             val json = Gson()
             val models: MutableList<ExpenseData>? = json.fromJson(br, type)
-            if(!wasReaded) {
-                wasReaded = true
-                models?.forEach { item->
-                    //csak a magyart nézi
-//                    when(item.category) {
-//                        getString(R.string.education) -> item.category = getString(R.string.education)
-//                        getString(R.string.food) -> item.category = getString(R.string.food)
-//                        getString(R.string.house) -> item.category = getString(R.string.house)
-//                        getString(R.string.injury) -> item.category = getString(R.string.injury)
-//                        getString(R.string.shop) -> item.category = getString(R.string.shop)
-//                        getString(R.string.sport) -> item.category = getString(R.string.sport)
-//                        getString(R.string.transport) -> item.category = getString(R.string.transport)
-//                        getString(R.string.video_game) -> item.category = getString(R.string.video_game)
-//                        getString(R.string.income) -> item.category = getString(R.string.income)
-//                    }
-                    expenses.add(item)
-                }
-
-//                expenses.addAll(models ?: mutableListOf())
+            if(!wasRead) {
+                wasRead = true
+                expenses.addAll(models ?: mutableListOf())
             }
         }
-        adapter = CustomAdapter(requireContext(),expenses)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(context)
+
+        lifecycleScope.launch(Dispatchers.Main) {
+            fileReadingJob.join()
+            adapter = CustomAdapter(requireContext(), expenses)
+            recyclerView.adapter = adapter
+            recyclerView.layoutManager = LinearLayoutManager(context)
+        }
         return root
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val json = GsonBuilder().setPrettyPrinting().create().toJson(adapter.returnExpenses())
+        requireContext().openFileOutput(filename, Context.MODE_PRIVATE).use {
+            it.write(json.toByteArray())
+        }
     }
 
     override fun onStart() {

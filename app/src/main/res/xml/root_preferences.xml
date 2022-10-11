@@ -1,16 +1,16 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    app:iconSpaceReserved="false">
+    app:iconSpaceReserved="false"
+    app:key="setting">
 
-    <PreferenceCategory app:title="@string/language_header">
+    <PreferenceCategory app:title="@string/expense"
+        app:key="general_setting">
 
-        <ListPreference
-            app:defaultValue="english"
-            app:entries="@array/language_entries"
-            app:entryValues="@array/language_values"
-            app:key="@string/language_key"
-            app:title="@string/language_title"
-            app:useSimpleSummaryProvider="true"/>
+        <EditTextPreference
+            app:key="max_payment"
+            app:title="@string/starting_value">
+
+        </EditTextPreference>
 
     </PreferenceCategory>
 
