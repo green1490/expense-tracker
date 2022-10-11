@@ -1,5 +1,6 @@
 package com.example.expensetracker
 
+import android.annotation.SuppressLint
 import android.app.KeyguardManager
 import android.content.Context
 import android.content.SharedPreferences
@@ -11,12 +12,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.expensetracker.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.system.exitProcess
 
 
@@ -24,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private var cancellationSignal:CancellationSignal? = null
-    lateinit var sharedPreferences:SharedPreferences
+    private lateinit var sharedPreferences:SharedPreferences
     private val authenticationCallBack:BiometricPrompt.AuthenticationCallback
     get() =
         object: BiometricPrompt.AuthenticationCallback() {
@@ -41,10 +45,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
-        sharedPreferences =  baseContext.getSharedPreferences("setting",Context.MODE_PRIVATE)
-        val theme = sharedPreferences.getInt("Theme", AppCompatDelegate.MODE_NIGHT_YES)
-        AppCompatDelegate.setDefaultNightMode(theme)
+        val fileReadingJob = lifecycleScope.launch(Dispatchers.IO) {
+            sharedPreferences = baseContext.getSharedPreferences("setting", Context.MODE_PRIVATE)
+            val theme = sharedPreferences.getInt("Theme", AppCompatDelegate.MODE_NIGHT_YES)
+            AppCompatDelegate.setDefaultNightMode(theme)
+        }
         super.onCreate(savedInstanceState)
 
         if (!checkBiometricSupport()) {
@@ -62,7 +69,14 @@ class MainActivity : AppCompatActivity() {
                 exitProcess(0)
             }.build()
 
-            biometricPrompt.authenticate(getCancellationSignal(),mainExecutor,authenticationCallBack)
+            lifecycleScope.launch(Dispatchers.Main) {
+                fileReadingJob.join()
+                biometricPrompt.authenticate(
+                    getCancellationSignal(),
+                    mainExecutor,
+                    authenticationCallBack
+                )
+            }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
