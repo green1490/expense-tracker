@@ -64,4 +64,16 @@
     <string name="auth_success">Sikeres hitelesítés!</string>
     <string name="auth_cancelled_user">Hitelesítést tőrőlte a felhasználó!</string>
     <string name="finger_not_enabled">Ujjlenyomat hitelesítés nincs elfogadva!</string>
+
+    <string-array name="categories">
+        <item>oktatás</item>
+        <item>étel</item>
+        <item>ház</item>
+        <item>sérülés</item>
+        <item>bolt</item>
+        <item>sport</item>
+        <item>utazás</item>
+        <item>videó játék</item>
+        <item>Jövedelem</item>
+    </string-array>
 </resources>

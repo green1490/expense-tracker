@@ -52,9 +52,6 @@ class MainActivity : AppCompatActivity() {
             exitProcess(0)
         }
 
-
-
-
         val biometricPrompt = BiometricPrompt.Builder(this)
             .setTitle(getString(R.string.expense_authentication))
             .setSubtitle(getString(R.string.subtitle))

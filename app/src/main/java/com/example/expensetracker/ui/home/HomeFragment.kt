@@ -2,7 +2,6 @@ package com.example.expensetracker.ui.home
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -78,11 +77,6 @@ class HomeFragment : Fragment() {
 
             val textViewBalance:TextView = binding.textViewBalance
             textViewBalance.text = homeViewModel.balance.value!!.toString()
-
-            if(homeViewModel.balance.value!! < 0)
-                textViewPercentage.setTextColor(Color.RED)
-            else
-                textViewPercentage.setTextColor(Color.WHITE)
         }
     }
 
@@ -121,7 +115,23 @@ class HomeFragment : Fragment() {
             val models: MutableList<ExpenseData>? = json.fromJson(br, type)
             if(!wasReaded) {
                 wasReaded = true
-                expenses.addAll(models ?: mutableListOf())
+                models?.forEach { item->
+                    //csak a magyart nézi
+//                    when(item.category) {
+//                        getString(R.string.education) -> item.category = getString(R.string.education)
+//                        getString(R.string.food) -> item.category = getString(R.string.food)
+//                        getString(R.string.house) -> item.category = getString(R.string.house)
+//                        getString(R.string.injury) -> item.category = getString(R.string.injury)
+//                        getString(R.string.shop) -> item.category = getString(R.string.shop)
+//                        getString(R.string.sport) -> item.category = getString(R.string.sport)
+//                        getString(R.string.transport) -> item.category = getString(R.string.transport)
+//                        getString(R.string.video_game) -> item.category = getString(R.string.video_game)
+//                        getString(R.string.income) -> item.category = getString(R.string.income)
+//                    }
+                    expenses.add(item)
+                }
+
+//                expenses.addAll(models ?: mutableListOf())
             }
         }
         adapter = CustomAdapter(requireContext(),expenses)
@@ -143,8 +153,7 @@ class HomeFragment : Fragment() {
 
         progressBarPercentage.progress = homeViewModel.percentage.value!!
         textViewBalance.text = homeViewModel.balance.value.toString()
-        textViewPercentage.text = homeViewModel.percentage.value!!.toString()
-
+        textViewPercentage.text = homeViewModel.percentage.value.toString()
     }
 
     override fun onDestroyView() {
