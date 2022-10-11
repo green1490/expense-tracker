@@ -8,7 +8,7 @@
 
     <item
         android:id="@+id/navigation_statistic"
-        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:icon="@drawable/ic_baseline_query_stats_24"
         android:title="@string/title_statistic" />
 
     <item
