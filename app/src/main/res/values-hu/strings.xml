@@ -6,11 +6,6 @@
     <string name="home_button">Hozzá add</string>
     <string name="title_statistic">Statisztika</string>
 
-    <string-array name="language_entries">
-        <item>Angol</item>
-        <item>Magyar</item>
-    </string-array>
-
     <string-array name="language_values">
         <item>english</item>
         <item>hungarian</item>
@@ -29,8 +24,6 @@
     <!-- Preference Titles -->
     <string name="ui">UI</string>
     <!--Language Preferences-->
-    <string name="language_title">Nyelv</string>
-    <string name="language_header">Nyelv</string>
     <string name="language_key">nyelv</string>
 
     <!-- Theme Preferences -->
@@ -65,15 +58,5 @@
     <string name="auth_cancelled_user">Hitelesítést tőrőlte a felhasználó!</string>
     <string name="finger_not_enabled">Ujjlenyomat hitelesítés nincs elfogadva!</string>
 
-    <string-array name="categories">
-        <item>oktatás</item>
-        <item>étel</item>
-        <item>ház</item>
-        <item>sérülés</item>
-        <item>bolt</item>
-        <item>sport</item>
-        <item>utazás</item>
-        <item>videó játék</item>
-        <item>Jövedelem</item>
-    </string-array>
+    <string name="starting_value">Max fizetés</string>
 </resources>

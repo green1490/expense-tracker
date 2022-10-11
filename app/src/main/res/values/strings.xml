@@ -8,8 +8,6 @@
     <!-- Preference Titles -->
     <string name="ui" translatable="false">UI</string>
     <!--Language Preferences-->
-    <string name="language_title">Language</string>
-    <string name="language_header">Language</string>
     <string name="language_key">language</string>
 
     <!-- Theme Preferences -->
@@ -41,4 +39,6 @@
     <string name="auth_success">Authentication success!</string>
     <string name="auth_cancelled_user">Authentication was cancelled by the user!</string>
     <string name="finger_not_enabled">Fingerprint authentication is not enabled!</string>
+
+    <string name="starting_value">Max payment</string>
 </resources>
