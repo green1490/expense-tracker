@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.expensetracker.ExpenseData
+import com.example.expensetracker.R
 import com.example.expensetracker.databinding.FragmentStatisticBinding
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -63,7 +64,7 @@ class StatisticFragment : Fragment() {
             val models: MutableList<ExpenseData>? = json.fromJson(br, type)
             val pieEntries: MutableList<PieEntry> = mutableListOf()
             models?.forEach { expense ->
-                if (expense.category != "Income") {
+                if (expense.category != getString(R.string.income)) {
                     expenses.add(expense)
                     val value = expensesDict[expense.category]
                     if(value == null) {
