@@ -31,8 +31,8 @@ class MainActivity : AppCompatActivity() {
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) {
                 super.onAuthenticationError(errorCode, errString)
                 notifyUser(getString(R.string.auth_error) + errString)
-                this@MainActivity.finish()
-                exitProcess(0)
+//                this@MainActivity.finish()
+//                exitProcess(0)
             }
 
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult?) {
@@ -42,16 +42,18 @@ class MainActivity : AppCompatActivity() {
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
         sharedPreferences =  baseContext.getSharedPreferences("setting",Context.MODE_PRIVATE)
         val theme = sharedPreferences.getInt("Theme", AppCompatDelegate.MODE_NIGHT_YES)
         AppCompatDelegate.setDefaultNightMode(theme)
+        super.onCreate(savedInstanceState)
 
         if (!checkBiometricSupport()) {
             this@MainActivity.finish()
             exitProcess(0)
         }
+
+
+
 
         val biometricPrompt = BiometricPrompt.Builder(this)
             .setTitle(getString(R.string.expense_authentication))
