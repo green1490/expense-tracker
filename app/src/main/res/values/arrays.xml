@@ -1,12 +1,6 @@
 <resources>
 
 
-
-    <string-array name="language_entries">
-        <item>English</item>
-        <item>Hungarian</item>
-    </string-array>
-
     <string-array name="language_values">
         <item>english</item>
         <item>hungarian</item>
@@ -20,18 +14,6 @@
     <string-array name="dark_mode_values">
         <item>MODE_NIGHT_NO</item>
         <item>MODE_NIGHT_YES</item>
-    </string-array>
-
-    <string-array name="categories">
-        <item>education</item>
-        <item>food</item>
-        <item>house</item>
-        <item>injury</item>
-        <item>shop</item>
-        <item>sport</item>
-        <item>transport</item>
-        <item>video game</item>
-        <item>Income</item>
     </string-array>
 
 </resources>
