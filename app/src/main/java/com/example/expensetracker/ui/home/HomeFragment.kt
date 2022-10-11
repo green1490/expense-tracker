@@ -96,8 +96,8 @@ class HomeFragment : Fragment() {
 
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
-        val maxPayment = sharedPreferences.getString("max_payment","0")
         val errNumber = 100000
+        val maxPayment = sharedPreferences.getString("max_payment","$errNumber")
         val maxPaymentNumber = try {
             maxPayment?.toInt() ?: errNumber
         }
@@ -108,9 +108,7 @@ class HomeFragment : Fragment() {
         homeViewModel =
             ViewModelProvider(this).get(HomeViewModel::class.java)
 
-        if (maxPayment != null) {
-            homeViewModel.setMaxPayment(maxPaymentNumber)
-        }
+        homeViewModel.setMaxPayment(maxPaymentNumber)
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val textViewBalance =       binding.textViewBalance
