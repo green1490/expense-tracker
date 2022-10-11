@@ -29,7 +29,7 @@ class StatisticFragment : Fragment() {
 
     private var _binding: FragmentStatisticBinding? = null
     private val filename = "history"
-    lateinit var br:BufferedReader
+    private lateinit var br:BufferedReader
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -42,8 +42,7 @@ class StatisticFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val statisticViewModel =
-            ViewModelProvider(this).get(StatisticViewModel::class.java)
+        ViewModelProvider(this).get(StatisticViewModel::class.java)
 
         _binding = FragmentStatisticBinding.inflate(inflater, container, false)
         val root: View = binding.root

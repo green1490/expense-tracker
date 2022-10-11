@@ -56,7 +56,7 @@ class Expense : AppCompatActivity() {
             if (!switch.isChecked) {
                 if (sum.text.trim().isEmpty() || tagImage.drawable == null) {
                     if (sum.text.trim().isEmpty())
-                        sum.error = "Fill it out. BAKA! HMPF!"
+                        sum.error = "Fill it out!"
                     Toast.makeText(
                         baseContext, "Please fill out Sum and choose a Tag", Toast.LENGTH_SHORT
                     ).show()
@@ -74,12 +74,12 @@ class Expense : AppCompatActivity() {
             }
             else {
                 if (sum.text.trim().isEmpty())
-                    sum.error = "Fill it out. BAKA! HMPF!"
+                    sum.error = "Fill it out!"
                 else{
                     this.setResult(
                         Activity.RESULT_OK, Intent()
                             .putExtra("Sum", sum.text.toString())
-                            .putExtra("Category", "Income")
+                            .putExtra("Category", getString(R.string.income))
                             .putExtra("Description", description.text.toString())
                             .putExtra("Icon", R.drawable.ic_income)
                             .putExtra("Checked",switch.isChecked)

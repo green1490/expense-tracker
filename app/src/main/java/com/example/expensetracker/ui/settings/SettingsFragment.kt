@@ -10,7 +10,7 @@ import com.example.expensetracker.R
 
 class SettingsFragment : PreferenceFragmentCompat(),SharedPreferences.OnSharedPreferenceChangeListener{
 
-    lateinit var sharedPreferences:SharedPreferences
+    private lateinit var sharedPreferences:SharedPreferences
 
 
     override  fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -64,7 +64,7 @@ class SettingsFragment : PreferenceFragmentCompat(),SharedPreferences.OnSharedPr
 
     }
 
-    fun darkMode() {
+    private fun darkMode() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         with (sharedPreferences.edit()) {
             this?.putInt("Theme", AppCompatDelegate.MODE_NIGHT_NO)
@@ -72,7 +72,7 @@ class SettingsFragment : PreferenceFragmentCompat(),SharedPreferences.OnSharedPr
         }
     }
 
-    fun lightMode() {
+    private fun lightMode() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         with (sharedPreferences.edit()) {
             this?.putInt("Theme", AppCompatDelegate.MODE_NIGHT_YES)
