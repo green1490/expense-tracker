@@ -58,5 +58,5 @@
     <string name="auth_cancelled_user">Hitelesítést tőrőlte a felhasználó!</string>
     <string name="finger_not_enabled">Ujjlenyomat hitelesítés nincs elfogadva!</string>
 
-    <string name="starting_value">Max fizetés</string>
+    <string name="starting_value">Max költségvetés</string>
 </resources>
