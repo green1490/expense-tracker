@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.expensetracker.ExpenseData
 import com.example.expensetracker.R
 import com.example.expensetracker.databinding.FragmentStatisticBinding
+import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
@@ -63,6 +64,7 @@ class StatisticFragment : Fragment() {
             val type: Type = object : TypeToken<MutableList<ExpenseData?>?>() {}.type
             val models: MutableList<ExpenseData>? = json.fromJson(br, type)
             val pieEntries: MutableList<PieEntry> = mutableListOf()
+
             models?.forEach { expense ->
                 if (expense.category != getString(R.string.income)) {
                     expenses.add(expense)
@@ -97,16 +99,25 @@ class StatisticFragment : Fragment() {
 
     private suspend fun setUpChart(pieEntries:Deferred<MutableList<PieEntry>>) {
         val categoryPieChart = binding.categoryPieChart
+        categoryPieChart.isRotationEnabled = true
+        categoryPieChart.animateY(1400, Easing.EaseInOutQuad)
+        categoryPieChart.setEntryLabelTextSize(12f)
+        categoryPieChart.setExtraOffsets(5f, 5f, 5f, 5f)
+        categoryPieChart.minAngleForSlices = 30f
+        categoryPieChart.setCenterTextSize(25f)
 
         val pieDataSet = PieDataSet(pieEntries.await(),"expenses")
-        pieDataSet.colors = ColorTemplate.JOYFUL_COLORS.toList()
+        pieDataSet.colors = ColorTemplate.PASTEL_COLORS.toList()
         pieDataSet.valueTextColor = Color.BLACK
+        pieDataSet.sliceSpace = 5f
+        pieDataSet.valueTextSize = 25f
+        pieDataSet.valueTextColor = Color.WHITE
 
         val pieData = PieData(pieDataSet)
 
         categoryPieChart.data = pieData
         categoryPieChart.description.isEnabled = false
-        categoryPieChart.centerText = "category"
+        categoryPieChart.centerText = getString(R.string.expenses)
         categoryPieChart.invalidate()
     }
 }

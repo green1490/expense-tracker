@@ -22,13 +22,11 @@
     </string-array>
 
     <!-- Preference Titles -->
-    <string name="ui">UI</string>
     <!--Language Preferences-->
     <string name="language_key">nyelv</string>
 
     <!-- Theme Preferences -->
     <string name="dark_mode">Sőtét</string>
-    <string name="dark_mode_def_value">MODE_NIGHT_FOLLOW_SYSTEM</string>
 
     <!-- Misc Preferences -->
     <string name="about_title">Rólam</string>
@@ -41,8 +39,9 @@
     <string name="sport">sport</string>
     <string name="transport">utazás</string>
     <string name="video_game">videó játék</string>
+    <string name="expenses">Kiadások</string>
     <string name="description">Leírás</string>
-    <string name="save">Mentás</string>
+    <string name="save">Mentés</string>
     <string name="category">Kategória:</string>
     <string name="income">Jövedelem</string>
     <string name="expense">Kiadás</string>
@@ -59,4 +58,6 @@
     <string name="finger_not_enabled">Ujjlenyomat hitelesítés nincs elfogadva!</string>
 
     <string name="starting_value">Max költségvetés</string>
+    <string name="current">Egyenleg</string>
+    <string name="cost">Költség(HUF)</string>
 </resources>

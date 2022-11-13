@@ -30,6 +30,7 @@
     <string name="category">Category:</string>
     <string name="income">Income</string>
     <string name="expense">Expense</string>
+    <string name="expenses">Expenses</string>
     <string name="expense_authentication">Expense authentication</string>
     <string name="subtitle">Authentication is required</string>
     <string name="auth_description">This app uses fingerprint to keep data secure!</string>
@@ -41,4 +42,6 @@
     <string name="finger_not_enabled">Fingerprint authentication is not enabled!</string>
 
     <string name="starting_value">Max payment</string>
+    <string name="current">Current:</string>
+    <string name="cost">Cost(HUF)</string>
 </resources>
