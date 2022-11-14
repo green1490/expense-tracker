@@ -3,7 +3,7 @@
     <string name="app_name">Kiadás kezelő</string>
     <string name="title_home">Otthon</string>
     <string name="title_setting">Beállítás</string>
-    <string name="home_button">Hozzá add</string>
+    <string name="home_button">Hozzáad</string>
     <string name="title_statistic">Statisztika</string>
 
     <string-array name="language_values">
