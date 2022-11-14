@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Expense tracker</string>
+    <string name="app_name" translatable="false">Andro Expense</string>
     <string name="title_home">Home</string>
     <string name="title_setting">Settings</string>
     <string name="home_button">Add</string>
